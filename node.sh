@@ -2,6 +2,8 @@
 
 echo Installing Node.js
 
+mkdir /data/db/
+
 platform='unknown'
 unamestr=`uname`
 if [ "$unamestr" = 'Linux' ]; then
@@ -36,12 +38,12 @@ if [ $platform = 'linux' ]; then
   # Download & Unpack Node.js - v 0.5.9
 
 
-  echo 'Download Node.js - v 0.5.9'
+  echo 'Download Node.js - v 0.4.12'
   mkdir /opt/node-install
-  cd /opt/node-install
+  pushd /opt/node-install
   git clone --depth 1 git://github.com/joyent/node.git
   cd node
-  git checkout v0.5.9
+  git checkout v0.4.12
   #wget http://nodejs.org/dist/node-v0.4.12.tar.gz
   #tar -zxf node-v0.4.12.tar.gz
   echo 'Node.js clone complete'
@@ -60,6 +62,15 @@ if [ $platform = 'linux' ]; then
   echo 'Install CouchDB'
   apt-get -y install couchdb
   echo 'CouchDB install completed.'
+
+  # Install MongoDB
+  echo 'Install MongoDB'
+  apt-get -y install mongodb-10gen
+  echo 'MongoDB install completed.'
+
+  echo 'Install Express'
+  npm install -g express
+ 
 
 else
   echo 'Assuming OSX'

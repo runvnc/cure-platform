@@ -1,9 +1,6 @@
 #!/bin/bash
-cd mongodb*
-cd bin
 echo "Starting mongod (or trying)"
-nohup ./mongod &
-cd ../..
+nohup mongod &
 echo Starting application
-touch themes/default/public/mobile/default.appcache
+#touch themes/default/public/mobile/default.appcache
 node app.js

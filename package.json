@@ -1,14 +1,11 @@
 {
-    "name": "cure"
+    "name": "cure-platform"
   , "version": "0.0.1"
   , "private": false
   , "dependencies": {
-      "express": "2.4.6"
+      "express": ""
     , "jade": ">= 0.0.1"
     , "mongoskin" : ""
     , "ejs" : ""
-  }
-  , "scripts": {
-     "preinstall": "./packageinst.sh"
   }
 }
