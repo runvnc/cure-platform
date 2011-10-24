@@ -15,6 +15,10 @@ npm install
 
 #curl --header "Content-Type: application/json" --referer http://isaacs.couchone.com/_replicate -d {"source":"http://isaacs.couchone.com/registry","target":"${targ}" http://isaacs.couchone.com/_replicate
 
+echo 'Initializing database..'
+
+node init.js
+
 echo Assuming everything went OK, Cure is now installed.
 
 

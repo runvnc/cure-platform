@@ -13,7 +13,7 @@ process.on('uncaughtException', function(err) {
   console.log(err.stack);
 });
 
-//var base = require('plugins/base');
+var base = require('curebase');
 
 //base.start();
 
