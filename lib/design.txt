@@ -1,0 +1,56 @@
+render some text on the page
+
+Pipe/data flow style one method on each verb object: run
+
+
+
+
+Site object
+
+   Pages class
+
+     Page object
+      
+        Nav object --> mostly the same except for the current page
+                       being indicated
+
+        Content object --> display different things
+                           depending on context
+
+   Page object
+      
+      Rendered according to PageTemplate object
+      
+    
+              
+For templating use coffeekup
+
+but I want templates to be very small and simple
+
+Use repeat or looper object instead of loops
+
+I want a widget that I can drag around
+Then I want to be able to put them inside
+And edit their properties
+
+Then they generate code
+So I am editing the template graphically
+
+head = new Slot 'head'
+
+body = new Slot 'body', [ 'top', 'main', 'end' ]
+  
+html = new Slot 'html', [ head, body ]
+html:
+  slots: [ head, body ]    
+
+html = new Slot
+  html: [
+    head
+    body: [
+      top
+      main
+      end
+    ]
+  ]
+  
