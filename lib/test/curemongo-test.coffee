@@ -24,20 +24,20 @@ vows
           db.createCollection 'chairs', @callback
         return
       
-      'made a collection named chairs': (err, res) ->
-        assert.isNull err
-        assert.include res, 'collectionName'
-        assert.equal res.collectionName, 'chairs'
+#      'made a collection named chairs': (err, res) ->
+#        assert.isNull err
+#        assert.include res, 'collectionName'
+#        assert.equal res.collectionName, 'chairs'
       
-      'after inserting a chair':
-        topic: (chairs) ->
-          chairs.insert
-            wood: 'mahogany'
-            style: 'victorian'
-        
-        'now contains the mahagony chair': (err, res) ->
-          assert.isNull err
-          assert.isTrue ( res.find({wood:'mahogany'}).toArray().length ) > 0
-    
+#      'after inserting a chair':
+#        topic: (chairs) ->
+#          chairs.insert
+#            wood: 'mahogany'
+#            style: 'victorian'
+#        
+#        'now contains the mahagony chair': (err, res) ->
+#          assert.isNull err
+#          assert.isTrue ( res.find({wood:'mahogany'}).toArray().length ) > 0
+##   
   .export module
 

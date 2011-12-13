@@ -1,18 +1,20 @@
 #implements shared type dbinterface
 #for mongodb
 
-mongo = require 'mongoskin'
+deadbeef = require 'mongolian'
 
 config = require './config'
 
 config = config.config
 
-connectString = exports.connectString = "http://#{config.host}:#{config.port}/"
+server = new Mongolian
 
-exports.db = mongo.db "#{exports.connectString}#{config.db}"
+#connectString = exports.connectString = "http://#{config.host}:#{config.port}/"
+
+#exports.db = mongo.db "#{exports.connectString}#{config.db}"
 
 exports.setDB = (name) ->
-  db = mongo.db "#{connectString}#{config.db}"
+  db = server.db name
 
 
 #exports.dbExists = (name, callback) ->
@@ -22,9 +24,8 @@ exports.setDB = (name) ->
 #  callback(true)
 
 exports.getDB = (name) ->
-  console.log "#{connectString}#{name}"
-  dbget = mongo.db "#{connectString}#{name}"
-  dbget
+  db = server.db name
+  db
 
 #exports.dropDB = (name, callback) =>
 #  dbdrop = mongo.db "#{connectString}#{name}"
@@ -36,7 +37,7 @@ exports.getDB = (name) ->
 #    callback err, done
 
 exports.load = (collection, objectid) ->
-
+   
 #exports.find = (collection, criteria) ->
 
 
