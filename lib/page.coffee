@@ -18,7 +18,7 @@
 #body is also a series
 
 
-
+###
 types.add [
 
   htmlopentag:
@@ -56,6 +56,7 @@ data.add [
       
 
 ]
+###
 
 #open tagname close
 #open tagname attributes close
@@ -82,16 +83,83 @@ data.add [
 #page with html page
 #say its a view
 
-pageviewer:
-  type: 'page'
-  context: 'html'
-  generator: 'htmlpage'
+x = "{blah}"
 
 mypage:
-  isA: 'page'
+  type: 'page'
   contents: [
     text: 'Hello World.'
   ]
+
+elementviewer:
+  type: 'htmlelement'
+  context: 'html'
+  outputs: "#{obj.tagname}"
+    
+
+spanviewer:
+  type: 'span'
+  context: 'html'
+  outputs:
+    htmlelement:
+      tagname: 'span'
+      contents: "#{obj.text}"
+
+textviewer:
+  type: 'text'
+  context: 'html'
+  outputs:
+    span:
+      text: "#{obj.val}"
+
+pageviewer:
+  matchestype: 'page'
+  context: 'html'
+  outputs:
+    htmlpage:
+      title: "#{obj.title}"
+      body: "#{obj.contents}"
+
+firstproperty = (obj) ->
+  props = prop for prop of obj
+  props[0]
+
+create = (obj) ->
+  #get the first property
+  #assume this is the only property
+  #assume the property name is a type name
+  #create an object of that type
+  #with those properties
+  prop = firstproperty obj
+  newobj = {}
+  newobj[prop] = obj[prop]
+
+
+
+class Thing
+  concat: (thing) ->
+     
+
+class Processor extends Thing
+  constructor: (@func) ->
+    
+  process: (obj, out) ->
+    out = []
+    if obj.children?
+      childout = child.process for child in obj.children
+     
+    func obj, out
+  
+
+outputprocessor:
+  matchestype: 'any'
+  context: 'any'
+  property: 'outputs'
+  process: (obj) ->
+    if typeof obj is 'string'
+      obj
+    else
+      create obj
 
 view 'mypage' 'html'
 
