@@ -1,0 +1,6 @@
+apage = ->
+  htmlpage 'To-do', 'true)'
+
+app.get '/To-do', (req, res) ->
+  res.render 'To-do'
+

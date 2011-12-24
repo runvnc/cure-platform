@@ -1,18 +1,17 @@
-{html, head, body} = dk = require('drykup')()
-generators = require '../generatorsdry'
+gen = require '../generators'
+{doctype, title, html, head, body, script, input} = gen.dk
+{ defer, mustinclude } = gen.generators.client.funcs
+
+util = require 'util'
+
 
 headitems = []
 
 htmlhead = (title_) ->
-  console.log '***** inside of htmlhead *****'
   head ->
     title title_
-    console.log 'headitems is ' + headitems
     for item in headitems
-      console.log 'item is ' + item
-      console.log 'return of item is ' + item()
-      console.log 'ckrender of item is ' + render item, null
-    (item() for item in headitems).join() if headitems?
+      (item() for item in headitems).join() if headitems?
 
 htmlpage = (title_, contentsfunc) ->
   doctype 5
@@ -24,10 +23,11 @@ htmlpage = (title_, contentsfunc) ->
       contentsfunc()
 
 jquery = ->
-    #'<script src="js/jquery.js></script>'
-    script src: 'js/jquery.js'
+  script src: 'js/jquery.js', ->
 
 entry = (field) ->
-    mustinclude headitems, jquery
-    input field
+  mustinclude headitems, jquery
+  input {name: field}
+
+gen.addAll 'client', { headitems:headitems, htmlhead:htmlhead, htmlpage:htmlpage, jquery:jquery, entry:entry }
 

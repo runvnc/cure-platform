@@ -1,0 +1,13 @@
+<!DOCTYPE html>
+<html>
+  <head>
+  <title>To-do</title>
+  <script src="js/jquery.js">
+  </script>
+</head>
+
+  <body>
+    <input name="todo" />
+
+  </body>
+</html>
