@@ -7,8 +7,8 @@ The ubiquitous to-do application:
 ```coffeescript
 shown = ->
   and: [
-    archived: false
-    done: false
+    archived: no
+    done: no
   ]
 
 exports.run = ->
@@ -19,8 +19,8 @@ exports.run = ->
     count todo, shown
     text ' remaining'
     actionbutton ->
-      update todo, { done: true },
-        archived: true
+      update todo, { done: yes },
+        archived: yes
     linebreak
     list todo,
       criteria: shown
