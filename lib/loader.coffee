@@ -16,17 +16,18 @@ loadall = (plugin) ->
   path = "#{__dirname}/#{plugin}"
   files = fs.readdirSync path
   for f in files when f isnt 'main.coffee'
+    console.log "Loading file #{plugin}/#{f}"
     r = require "#{path}/#{f}"
 
 exports.load = ->
   loadall(firstprop plugin) for plugin in plugins when firstval(plugin) is on
-
-  generators.makeFunctions()
- 
   loadall 'main'
-
+  generators.makeFunctions()
   main = require './main/main'
+  if not main.run?
+    console.log "Loader error: main must export run()"
+    false
+  else
+    generators.generateAll('todo', main.run)
+    true
 
-  generators.generateAll('todo', main.run)
- 
-  true

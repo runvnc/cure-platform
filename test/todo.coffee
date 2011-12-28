@@ -15,8 +15,6 @@ Feature("Generating todo application")
     return r
 
   .when "I call load", ->
-    console.log util.inspect loader
-    console.log 'calling it'
     ret = loader.load()
     @callback()
     ret

@@ -5,14 +5,12 @@ exports.dk = dk
 util = require 'util'
 fs = require 'fs'
 uuid = require './souuid'
+cs = require 'coffee-script'
 
 mergeover = (object, properties) ->
   for key, val of properties
     object[key] = val
   object
-
-serv = {}
-cli = {}
 
 deferred = {}
 
@@ -37,23 +35,27 @@ deferredtemplate =  ->
   replacedeferred rendered, deferred
 
 class FileGenerator
-  constructor: (@name, @path) ->
+  constructor: (@name, @path, @ext = '') ->
     @funcs = {}
 
   add: (funcs) ->
     @funcs = mergeover @funcs, funcs
   
   run: (name, func) ->
-    dk.resetHtml()
-    setContext @name
-    func()
-    output = dk.htmlOut
-    newout = replacedeferred output
-    ret = fs.writeFileSync("#{@path}/#{name}", newout)
+    try
+      dk.resetHtml()
+      setContext @name
+      func()
+      output = dk.htmlOut
+      newout = replacedeferred output
+      ret = fs.writeFileSync("#{@path}/#{name}#{@ext}", newout)
+    catch error
+      console.log "File generation error. Generator name is #{@name} and path is #{@path}. Error in #{name} function #{func}. Message is #{error}"
 
 generators =
-  client: new FileGenerator 'client', 'views'
-  server: new FileGenerator 'server', '.'
+  client: new FileGenerator 'client', 'views', '.html'
+  server: new FileGenerator 'server', '.', '.js'
+#  jsclient: new FileGenerator 'jsclient', 'views'
 
 
 addToAll = (funcs) ->
@@ -82,10 +84,14 @@ exports.setContext = setContext
 addfunc = (name, func) ->
   exports.functions[name] = (allargs...) ->
     funcs = generators[exports.context].funcs
-    if funcs[name]?
-      funcs[name](allargs...)
-    else
-      console.log exports.context + '.' + name + ' not defined, skipping'
+    try
+      if funcs[name]?
+        funcs[name](allargs...)
+      else
+        console.log exports.context + '.' + name + ' not defined, skipping'
+    catch error
+      console.log "Generation error: name = #{name}  func = #{util.inspect func}. Error is #{error}"
+
 
 exports.addAll = (gen, funcarr) ->
   mergeover generators[gen].funcs, funcarr
@@ -94,10 +100,15 @@ exports.makeFunctions = ->
   exports.functions = {}
   for generator, val of generators
     for funcname, func of val.funcs
+      console.log "Adding function #{funcname}"
       addfunc funcname, func
 
 exports.generateAll = (name, func) ->
+  console.log "Inside of generateAll funcs is #{console.log util.inspect generators}"
   for gen, generator of generators
     generator.run name, func
 
+exports.include = (name) ->
+  source = fs.readFileSync "./includes/#{name}.coffee"
+  cs.eval source
 

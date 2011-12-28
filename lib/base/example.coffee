@@ -39,7 +39,7 @@ components =
       update:
       collection: 'todo'
       where:
-        criteria: [ 'done', '=', 'true' ]
+        criteria: [ 'user', '=', currentUser, 'and', 'done', '=', 'true' ]
         set: [ archived: true ]
     list:
         collection: 'todo'

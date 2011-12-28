@@ -13,21 +13,38 @@ htmlhead = (title_) ->
     for item in headitems
       (item() for item in headitems).join() if headitems?
 
-htmlpage = (title_, contentsfunc) ->
+htmlpage = (title_, contents) ->
   doctype 5
   html ->
     defer ->
       htmlhead title_
          
     body ->
-      contentsfunc()
+      contents()
 
 jquery = ->
   script src: 'js/jquery.js', ->
 
-entry = (field) ->
-  mustinclude headitems, jquery
-  input {name: field}
+boolean = (name) ->
+  input
+    type: 'checkbox'
+    name: name
+    id: "#{name}_"
 
-gen.addAll 'client', { headitems:headitems, htmlhead:htmlhead, htmlpage:htmlpage, jquery:jquery, entry:entry }
+text = (name) ->
+  input
+    type: 'text'
+    name: name
+    id: "#{name}_"
+
+entry = (atype) ->
+  if not atype?
+    console.log "entry(): type function parameter not specified or improperly defined."
+    false
+  else
+    mustinclude headitems, jquery
+    console.log "Trying to call #{atype}"
+    atype()
+
+gen.addAll 'client', { headitems:headitems, htmlhead:htmlhead, htmlpage:htmlpage, jquery:jquery, entry:entry, boolean:boolean, text:text }
 
