@@ -5,7 +5,7 @@ Cure is a (web-based) Node.js data and content management platform with a plugin
 The ubiquitous to-do application:
 
 ```coffeescript
-shown = ->
+remaining = ->
   and: [
     archived: no
     done: no
@@ -16,14 +16,15 @@ exports.run = ->
     entryfield todo.description
     entrybutton todo, 'add'
     linebreak
-    count todo, shown
+    count todo, remaining
     text ' remaining'
     actionbutton ->
       update todo, { done: yes },
         archived: yes
     linebreak
     list todo,
-      criteria: shown
+      criteria:
+        archived: no
       template: ->
         entryfield todo.done
         showfield todo.description
