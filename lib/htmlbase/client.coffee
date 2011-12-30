@@ -1,11 +1,13 @@
+
 gen = require '../generators'
 {doctype, title, html, head, body, script, input} = gen.dk
 { defer, mustinclude } = gen.generators.client.funcs
 
 util = require 'util'
 
-
+#startexports
 headitems = []
+entryfields = {}
 
 htmlhead = (title_) ->
   head ->
@@ -25,26 +27,22 @@ htmlpage = (title_, contents) ->
 jquery = ->
   script src: 'js/jquery.js', ->
 
-boolean = (name) ->
+inputentry = (name, type) ->
+  mustinclude headitems, jquery
   input
-    type: 'checkbox'
+    type: type
     name: name
     id: "#{name}_"
 
-text = (name) ->
-  input
-    type: 'text'
-    name: name
-    id: "#{name}_"
+entryfield = (field) ->
+  if entryfields[field.type]? then entryfields[field.type](field.name)
 
-entry = (atype) ->
-  if not atype?
-    console.log "entry(): type function parameter not specified or improperly defined."
-    false
-  else
-    mustinclude headitems, jquery
-    console.log "Trying to call #{atype}"
-    atype()
+entryfields =
+  boolean: (name) ->
+    inputentry  name, 'checkbox'
+  text: (name) ->
+    inputentry name, 'text'
+  
 
-gen.addAll 'client', { headitems:headitems, htmlhead:htmlhead, htmlpage:htmlpage, jquery:jquery, entry:entry, boolean:boolean, text:text }
+gen.addAll 'client', { headitems:headitems, htmlhead:htmlhead, htmlpage:htmlpage, jquery:jquery, entryfield:entryfield, entryfields: entryfields }
 

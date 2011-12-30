@@ -56,7 +56,7 @@ generators =
   client: new FileGenerator 'client', 'views', '.html'
   server: new FileGenerator 'server', '.', '.js'
 #  jsclient: new FileGenerator 'jsclient', 'views'
-
+  
 
 addToAll = (funcs) ->
   for name, gen of generators

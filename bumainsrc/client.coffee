@@ -3,6 +3,14 @@ gen = require '../generators'
 { defer, mustinclude, boolean, text } = gen.generators.client.funcs
 
 
+boolean = (name) ->
+  type: 'boolean'
+  name: name
+
+text = (name) ->
+  type: 'text'
+  name: name
+
 todo = ->
   done: boolean 'done'
   description: text 'description'
