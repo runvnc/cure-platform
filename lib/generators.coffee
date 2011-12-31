@@ -50,7 +50,8 @@ class FileGenerator
       newout = replacedeferred output
       ret = fs.writeFileSync("#{@path}/#{name}#{@ext}", newout)
     catch error
-      console.log "File generation error. Generator name is #{@name} and path is #{@path}. Error in #{name} function #{func}. Message is #{error}"
+      console.log "File generation error. Generator name is #{@name} and path is #{@path}." +
+                  "Error in #{name} function #{func}. Message is #{error}"
 
 generators =
   client: new FileGenerator 'client', 'views', '.html'
@@ -96,8 +97,9 @@ addfunc = (name, func) ->
 exports.addAll = (gen, funcarr) ->
   mergeover generators[gen].funcs, funcarr
 
+exports.functions = {}
+
 exports.makeFunctions = ->
-  exports.functions = {}
   for generator, val of generators
     for funcname, func of val.funcs
       console.log "Adding function #{funcname}"
@@ -111,4 +113,5 @@ exports.generateAll = (name, func) ->
 exports.include = (name) ->
   source = fs.readFileSync "./includes/#{name}.coffee"
   cs.eval source
+
 
