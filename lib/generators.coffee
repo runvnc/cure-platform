@@ -55,7 +55,7 @@ class FileGenerator
 
 generators =
   client: new FileGenerator 'client', 'views', '.html'
-  server: new FileGenerator 'server', '.', '.js'
+  server: new FileGenerator 'server', '.', '.coffee'
 #  jsclient: new FileGenerator 'jsclient', 'views'
   
 
@@ -90,6 +90,7 @@ addfunc = (name, func) ->
         funcs[name](allargs...)
       else
         console.log exports.context + '.' + name + ' not defined, skipping'
+        console.log "context is #{exports.context} and funcs is #{util.inspect funcs}"
     catch error
       console.log "Generation error: name = #{name}  func = #{util.inspect func}. Error is #{error}"
 

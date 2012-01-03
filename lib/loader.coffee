@@ -28,33 +28,32 @@ wrap = (source, file) ->
   declares = ''
   if generators.generators[file]?
     funcs = generators.generators[file].funcs
-    if funcs.length > 0
-      declares = '{ ' + funcs.join() + '}'
-      declares = "{#{declares}} = gen.generators.#{file}.funcs\n"
+    if funcs? and Object.keys(funcs)? and Object.keys(funcs).length > 0
+      declares = '{ ' + Object.keys(funcs).join() + '}'
+      declares = "#{declares} = gen.generators.#{file}.funcs\n"
   bounds = "#startexports\n"
   bottom = ''
   start = source.indexOf bounds
   if start >= 0
     exports = source.substr(start + bounds.length)
-    defs = exports.match /^(.*)[ ]*[=]+/gmi
+    defs = exports.match /^[a-z0-9]+[ ]*[=]+/gmi
     list = ("#{strip def}:#{strip def}" for def in defs)
     bottom = "gen.addAll '#{file}', {#{list.join()}}"
+  else
+    console.log "No #startexports in #{file}"
   top + declares + source + "\n" + bottom
 
 process = (path, fname) ->
-  r = require "#{path}/#{fname}"
-  console.log "Loading file #{fname}"
   source = fs.readFileSync "#{path}/#{fname}"
   source = wrap source, fname
   tmpname = "#{path}/tmp__#{uuid.v4()}"
   fs.writeFileSync tmpname + '.coffee', source
   r = require tmpname
-  fs.unlinkSync tmpname + '.coffee'
 
 loadall = (plugin) ->
   path = "#{__dirname}/#{plugin}"
   files = fs.readdirSync path
-  for f in files when f isnt 'main.coffee' and f.indexOf('tmp__') isnt 0
+  for f in files when f isnt 'types.coffee' and f isnt 'main.coffee' and f.indexOf('tmp__') isnt 0
     process path, f
   generators.makeFunctions()
 

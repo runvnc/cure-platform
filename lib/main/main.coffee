@@ -13,7 +13,6 @@ shown = ->
 
 exports.run = ->
   htmlpage 'todo.html', ->
-    console.log "Inside of run todo.description is #{todo}"
     entryfield todo.description
     #entrybutton todo, 'add'
     #linebreak

@@ -2,7 +2,7 @@
 
 
 #startexports
-todo =
+exports.todo =
   done: boolean 'done'
   description: text 'description'
   archived: boolean 'archived'
