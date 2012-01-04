@@ -1,10 +1,10 @@
 
 #startexports
-exports.boolean = (name) ->
+boolean = (name) ->
   type: 'boolean'
   name: name
 
-exports.text = (name) ->
+textfield = (name) ->
   type: 'text'
   name: name
 

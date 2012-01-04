@@ -4,7 +4,7 @@ generators = require './generators'
 #cs = require 'coffee-script'
 uuid = require 'node-uuid'
 util = require 'util'
-
+pathx = require 'path'
 
 firstprop = (obj) ->
   props = (prop for prop, val of obj)
@@ -21,6 +21,8 @@ dropext = (file) ->
   file.substr 0, file.indexOf('.')
 
 wrap = (source, file) ->
+  if not file? or file is '.' or file is '..' then return ''
+
   file = dropext file
   source = (source + " ").trim()
   top = fs.readFileSync "#{__dirname}/includes/all.coffee"
@@ -37,18 +39,26 @@ wrap = (source, file) ->
   if start >= 0
     exports = source.substr(start + bounds.length)
     defs = exports.match /^[a-z0-9]+[ ]*[=]+/gmi
-    list = ("#{strip def}:#{strip def}" for def in defs)
-    bottom = "gen.addAll '#{file}', {#{list.join()}}"
+    if defs?
+      list = ("#{strip def}:#{strip def}" for def in defs)
+      bottom = "gen.addAll '#{file}', {#{list.join()}}"
   else
     console.log "No #startexports in #{file}"
+    return ''
   top + declares + source + "\n" + bottom
 
 process = (path, fname) ->
-  source = fs.readFileSync "#{path}/#{fname}"
-  source = wrap source, fname
-  tmpname = "#{path}/tmp__#{uuid.v4()}"
-  fs.writeFileSync tmpname + '.coffee', source
-  r = require tmpname
+  if not pathx.existsSync "#{path}/#{fname}"
+    false
+  else
+    stats = fs.statSync "#{path}/#{fname}"
+    if stats.isDirectory() then return false
+
+    source = fs.readFileSync "#{path}/#{fname}"
+    source = wrap source, fname
+    tmpname = "#{path}/tmp__#{uuid.v4()}"
+    fs.writeFileSync tmpname + '.coffee', source
+    r = require tmpname
 
 loadall = (plugin) ->
   path = "#{__dirname}/#{plugin}"
@@ -57,11 +67,25 @@ loadall = (plugin) ->
     process path, f
   generators.makeFunctions()
 
+loadalltypes = (list) ->
+  source = ''
+  list.push 'main'
+  for pl in list
+    path = "#{__dirname}/#{pl}/types.coffee"
+    if pathx.existsSync(path)
+      source += fs.readFileSync path
+  source += fs.readFileSync "#{__dirname}/main/main.coffee"
+  tmpname = "#{__dirname}/main/tmp__#{uuid.v4()}"
+  fs.writeFileSync tmpname + '.coffee', source
+  tmpname
+
 exports.load = ->
   generators.makeFunctions()
-  loadall(firstprop plugin) for plugin in plugins when firstval(plugin) is on
+  list = ((firstprop plugin) for plugin in plugins when firstval(plugin) is on)
+  loadall pl for pl in list
+  maintmp = loadalltypes list
   loadall 'main'
-  main = require './main/main'
+  main = require maintmp
   if not main.run?
     console.log "Loader error: main must export run()"
     false

@@ -32,6 +32,7 @@ inputentry = (name, type) ->
     id: "#{name}_"
 
 entryfield = (field) ->
+  console.log "&&&&&&&&&&&&&& inside of entryfield -- field is #{field}"
   if entryfields[field.type]? then entryfields[field.type](field.name)
 
 entryfields =
