@@ -1,5 +1,5 @@
 (function() {
-  var app, express, util;
+  var apage, app, express, util;
   util = require('util');
   express = require('express');
   app = module.exports = express.createServer();
@@ -7,12 +7,17 @@
     console.log(err.message);
     return console.log(err.stack);
   });
-  app.set('view engine', 'coffee');
   app.set('view engine', 'ejs');
-  app.get('/test', function(req, res) {
-    return res.render('test', {
-      food: 'bar'
-    });
+  app.set("view options", {
+    layout: false
+  });
+  app.register('.html', require('ejs'));
+  app.register('.coffee', require('coffeekup').adapters.express);
+  apage = function() {
+    return htmlpage('todo.html', 'true)');
+  };
+  app.get('/todo.html', function(req, res) {
+    return res.render('todo.html');
   });
   app.listen(3000);
 }).call(this);

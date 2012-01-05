@@ -37,4 +37,7 @@ entryfields =
     inputentry  name, 'checkbox'
   text: (name) ->
     inputentry name, 'text'
+
+expressapp = (func) ->
+  func()
   

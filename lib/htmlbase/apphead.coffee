@@ -14,15 +14,3 @@ app.set("view options", { layout: false })
 app.register '.html', require('ejs')
 app.register '.coffee', require('coffeekup').adapters.express
 
-
-
-apage = ->
-  htmlpage 'todo.html', 'true)'
-
-app.get '/todo.html', (req, res) ->
-  res.render 'todo.html'
-
-
-
-app.listen 3000
-

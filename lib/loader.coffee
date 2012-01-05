@@ -56,9 +56,10 @@ process = (path, fname) ->
 
     source = fs.readFileSync "#{path}/#{fname}"
     source = wrap source, fname
-    tmpname = "#{path}/tmp__#{uuid.v4()}"
+    tmpname = "#{path}/tmp__#{fname}_#{uuid.v4()}"
     fs.writeFileSync tmpname + '.coffee', source
     r = require tmpname
+    fs.unlinkSync tmpname + '.coffee'
 
 loadall = (plugin) ->
   path = "#{__dirname}/#{plugin}"
@@ -67,6 +68,14 @@ loadall = (plugin) ->
     process path, f
   generators.makeFunctions()
 
+addgenfunctions = ->
+  funcs = generators.functions
+  declares = ''
+  if funcs? and Object.keys(funcs)? and Object.keys(funcs).length > 0
+    declares = '{ ' + Object.keys(funcs).join() + '}'
+    declares = "#{declares} = gen.functions\n"
+  declares
+
 loadalltypes = (list) ->
   source = ''
   list.push 'main'
@@ -74,6 +83,10 @@ loadalltypes = (list) ->
     path = "#{__dirname}/#{pl}/types.coffee"
     if pathx.existsSync(path)
       source += fs.readFileSync path
+  top = fs.readFileSync "#{__dirname}/includes/all.coffee"
+  top = (top + " ").trim() + "\n"
+  source += top
+  source += addgenfunctions()
   source += fs.readFileSync "#{__dirname}/main/main.coffee"
   tmpname = "#{__dirname}/main/tmp__#{uuid.v4()}"
   fs.writeFileSync tmpname + '.coffee', source
@@ -86,10 +99,11 @@ exports.load = ->
   maintmp = loadalltypes list
   loadall 'main'
   main = require maintmp
+  fs.unlinkSync "#{maintmp}.coffee"
   if not main.run?
     console.log "Loader error: main must export run()"
     false
   else
-    generators.generateAll('todo', main.run)
+    generators.generateAll('app', main.run)
     true
 

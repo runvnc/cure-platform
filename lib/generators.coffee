@@ -42,6 +42,17 @@ class FileGenerator
     @funcs = mergeover @funcs, funcs
   
   run: (name, func) ->
+    addfile 'blah'
+
+    dk.resetHtml()
+    setContext @name
+    do until outfiles.length is 0
+      func() 
+        
+  
+    while outfiles.length > 0
+      
+
     try
       dk.resetHtml()
       setContext @name
@@ -88,6 +99,15 @@ addfunc = (name, func) ->
     try
       if funcs[name]?
         funcs[name](allargs...)
+       
+        if fileout[name]?
+          output = dk.htmlOut
+          newout = replacedeferred output
+          path = fileout[name].path
+          filenm = fileout[name].name
+          ret = fs.writeFileSync("#{path}/#{filenm}", newout)
+          dk.restHtml()
+
       else
         console.log exports.context + '.' + name + ' not defined, skipping'
         console.log "context is #{exports.context} and funcs is #{util.inspect funcs}"

@@ -1,4 +1,8 @@
 #!/bin/bash
+set -e
+echo "Generating application and testing"
+vows --spec test/app.coffee
+
 echo "Starting mongod (or trying)"
 nohup mongod &
 echo Starting application
@@ -6,7 +10,4 @@ echo Starting application
 
 echo Compiling CoffeeScript to JavaScript
 coffee -c app.coffee
-cd node_modules/curebase
-coffee -o . -c .
-cd ../..
 node app.js
