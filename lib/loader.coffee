@@ -27,6 +27,9 @@ wrap = (source, file) ->
   source = (source + " ").trim()
   top = fs.readFileSync "#{__dirname}/includes/all.coffee"
   top = (top + " ").trim() + "\n"
+  inc = ''
+  if pathx.existsSync "#{__dirname}/includes/#{file}.coffee"
+    inc = fs.readFileSync "#{__dirname}/includes/#{file}.coffee"
   declares = ''
   if generators.generators[file]?
     funcs = generators.generators[file].funcs
@@ -45,7 +48,7 @@ wrap = (source, file) ->
   else
     console.log "No #startexports in #{file}"
     return ''
-  top + declares + source + "\n" + bottom
+  top + inc + "\n" + declares + source + "\n" + bottom
 
 process = (path, fname) ->
   if not pathx.existsSync "#{path}/#{fname}"

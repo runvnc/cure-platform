@@ -1,5 +1,5 @@
 (function() {
-  var apage, app, express, util;
+  var app, express, util;
   util = require('util');
   express = require('express');
   app = module.exports = express.createServer();
@@ -13,11 +13,11 @@
   });
   app.register('.html', require('ejs'));
   app.register('.coffee', require('coffeekup').adapters.express);
-  apage = function() {
-    return htmlpage('todo.html', 'true)');
-  };
-  app.get('/todo.html', function(req, res) {
+  app.get('/todo', function(req, res) {
     return res.render('todo.html');
+  });
+  app.get('/about', function(req, res) {
+    return res.render('about.html');
   });
   app.listen(3000);
 }).call(this);

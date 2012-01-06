@@ -16,11 +16,11 @@ app.register '.coffee', require('coffeekup').adapters.express
 
 
 
-apage = ->
-  htmlpage 'todo.html', 'true)'
-
-app.get '/todo.html', (req, res) ->
+app.get '/todo', (req, res) ->
   res.render 'todo.html'
+
+app.get '/about', (req, res) ->
+  res.render 'about.html'
 
 
 

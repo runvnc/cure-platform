@@ -7,7 +7,7 @@ shown = ->
 
 exports.run = ->
   expressapp ->
-    htmlpage 'todo.html', ->
+    htmlpage 'todo', ->
       entryfield todo.description
       #entrybutton todo, 'add'
       #linebreak
@@ -22,3 +22,9 @@ exports.run = ->
       #  template: ->
       #    entryfield todo.done
       #    showfield todo.description
+
+    htmlpage 'about', ->
+      h1 'About'
+      p 'Hello, this is about..'
+ 
+

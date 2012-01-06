@@ -1,5 +1,25 @@
 
 #startexports
+doctype = (x) -> doctype_ x
+
+html = (x) -> html_ x
+
+head = (x) -> head_ x
+
+body = (x) -> body_ x
+
+input = (x) -> input_ x
+
+h1 = (x) -> h1_ x
+
+p = (x) -> p_ x
+
+text = (x) -> text_ x
+
+title = (x) -> title_ x
+
+script = (x) -> script_ x
+
 headitems = []
 entryfields = {}
 
@@ -10,6 +30,7 @@ htmlhead = (title_) ->
       (item() for item in headitems).join() if headitems?
 
 htmlpage = (title_, contents) ->
+  newfile title_
   doctype 5
   html ->
     defer ->
