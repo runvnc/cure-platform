@@ -11,4 +11,5 @@ style_ = gen.dk.style
 h1_ = gen.dk.h1
 text_ = gen.dk.text
 input_ = gen.dk.input
+button_ = gen.dk.button
 p_ = gen.dk.p

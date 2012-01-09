@@ -5,8 +5,10 @@ loader = require "#{__dirname}/../lib/loader"
 util = require 'util'
 path = require 'path'
 assert = require 'assert'
+db = require "#{__dirname}/../lib/db/db.coffee"
 
 Feature("Generating todo application")
+
   .scenario("Basic todo app generate")
 
   .given "Loader is defined", ->

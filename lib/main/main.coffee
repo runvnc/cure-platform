@@ -9,7 +9,7 @@ exports.run = ->
   expressapp ->
     htmlpage 'todo', ->
       entryfield todo.description
-      #entrybutton todo, 'add'
+      entrybutton todo, 'add'
       #linebreak
       #count todo, shown
       #text ' remaining'
