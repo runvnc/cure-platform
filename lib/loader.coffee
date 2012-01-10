@@ -22,7 +22,6 @@ dropext = (file) ->
 
 wrap = (source, file) ->
   if not file? or file is '.' or file is '..' then return ''
-
   file = dropext file
   source = (source + " ").trim()
   top = fs.readFileSync "#{__dirname}/includes/all.coffee"
@@ -56,7 +55,6 @@ process = (path, fname) ->
   else
     stats = fs.statSync "#{path}/#{fname}"
     if stats.isDirectory() then return false
-
     source = fs.readFileSync "#{path}/#{fname}"
     source = wrap source, fname
     tmpname = "#{path}/tmp__#{fname}_#{uuid.v4()}"

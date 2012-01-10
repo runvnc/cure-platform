@@ -1,23 +1,21 @@
 MongolianDeadBeef = require 'mongolian'
 
-security = require '../security/security'
+cureutil = require '../util'
 
-cook = require('YouAreDaChef').YouAreDaChef
+security = require '../security/security'
 
 server = new MongolianDeadBeef
 
-db = server.db 'app'
+db_ = server.db 'app'
 
-cook(db)
-  .guard /(.*)/, ->
-    console.log "HELLO FROM GUARD"
-    return true
-    #security.dbaccess match[1], value[1]
+exports.db = {}
 
-#server = new MongolianDeadBeef
+guarded = {}
 
-#db = server.db 'app'
-
-exports.db = db
-
+exports.db.collection = (name) ->
+  if not (name in guarded)
+    col = db_.collection(name)
+    cureutil.guard col, /(.*)/, name, security.dbaccess
+    guarded[name] = col
+  guarded[name]
 

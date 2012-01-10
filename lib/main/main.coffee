@@ -6,6 +6,8 @@ shown = ->
   ]
 
 exports.run = ->
+  addpermission 'guests', 'todo', 'all'
+
   expressapp ->
     htmlpage 'todo', ->
       entryfield todo.description
