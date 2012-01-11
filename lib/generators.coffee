@@ -6,10 +6,29 @@ util = require 'util'
 fs = require 'fs'
 uuid = require './souuid'
 cs = require 'coffee-script'
+cureutil = require './util'
+
+appendcall = (object, name, func) ->
+  funcs = "#{name}_funcs"
+  console.log "A"
+  if object[funcs]?
+    console.log "adding func"
+    object[funcs].push funcs
+  else
+    console.log "initializing funcs"
+    object[funcs] = [ func ]
+  console.log "object[funcs] is now #{util.inspect object[funcs]}"
+  object[name] = cureutil.inseries object[funcs]
+  console.log "Done with appendcall object is now #{util.inspect object}"
+
 
 mergeover = (object, properties) ->
   for key, val of properties
-    object[key] = val
+    if typeof val is "function"
+      console.log "Calling appendcall object is #{util.inspect object} key is #{key} val is #{val}"
+      appendcall object, key, val
+    else
+      object[key] = val
   object
 
 outfile = null
@@ -30,7 +49,7 @@ replacedeferred = (rendered) ->
     uuid_ = uuid_.substr(0, uuid_.length-1)
     dk.resetHtml()
     deferred[uuid_]()
-    rendered = rendered.replace(found, dk.htmlOut)
+    rendered = rendered.replace found, dk.htmlOut
   rendered
     
 deferredtemplate =  ->

@@ -59,7 +59,7 @@ Feature("DB access and security check")
     @callback()
 
   .when "I insert an apple", ->
-    apple = { name: 'apple2' }  #id: uuid.v4()
+    apple = { id: uuid.v4() }  #id: uuid.v4()
     ret = things.insert apple
     things.findOne apple, @callback
 
