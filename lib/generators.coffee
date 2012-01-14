@@ -10,26 +10,22 @@ cureutil = require './util'
 
 appendcall = (object, name, func) ->
   funcs = "#{name}_funcs"
-  console.log "A"
-  if object[funcs]?
-    console.log "adding func"
-    object[funcs].push funcs
+  if (object[funcs])?
+    object[funcs].push func
   else
-    console.log "initializing funcs"
-    object[funcs] = [ func ]
-  console.log "object[funcs] is now #{util.inspect object[funcs]}"
+    object[funcs] = [ object[name], func ]
   object[name] = cureutil.inseries object[funcs]
-  console.log "Done with appendcall object is now #{util.inspect object}"
 
 
 mergeover = (object, properties) ->
-  for key, val of properties
+  for key, val of properties when key.indexOf('_funcs') < 0
     if typeof val is "function"
-      console.log "Calling appendcall object is #{util.inspect object} key is #{key} val is #{val}"
       appendcall object, key, val
     else
       object[key] = val
   object
+
+exports.mergeover = mergeover
 
 outfile = null
 
@@ -98,7 +94,7 @@ generators =
 
 addToAll = (funcs) ->
   for name, gen of generators
-   gen.add funcs
+    gen.add funcs
 
 exports.generators = generators
 

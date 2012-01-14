@@ -1,0 +1,2 @@
+exports.xy = (m) ->
+  m

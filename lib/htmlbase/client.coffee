@@ -39,9 +39,11 @@ htmlpage = (title_, contents) ->
          
     body ->
       contents()
+      script src: '/browserify.js', ->
+       
 
 jquery = ->
-  script src: 'js/jquery.js', ->
+  script src: '//ajax.googleapis.com/ajax/libs/jquery/1.5.1/jquery.min.js', ->
 
 expressapp = (func) ->
   func()

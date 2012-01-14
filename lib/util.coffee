@@ -1,3 +1,12 @@
+util = require 'util'
+
+exports.q = (arg) ->
+  if typeof arg is "string"
+    "'#{arg}'"
+  else
+    arg
+
+
 exports.guard = (obj, regex, category, func) ->
   for prop, val of obj when typeof val is 'function' and prop.match regex
     do (prop, val) ->
@@ -9,7 +18,6 @@ exports.guard = (obj, regex, category, func) ->
 
 exports.inseries = (funcs) ->
   (args...) ->
-    ret = ''
-    for func in funcs
-      ret += func args...
-    ret
+    for func in funcs when typeof func is "function"
+      func args...
+    true

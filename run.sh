@@ -8,6 +8,4 @@ nohup mongod &
 echo Starting application
 #touch themes/default/public/mobile/default.appcache
 
-echo Compiling CoffeeScript to JavaScript
-coffee -c app.coffee
-node app.js
+coffee app.coffee

@@ -1,12 +1,8 @@
-fs = require 'fs'
-
 #startexports
 
-text = (x) -> text_ x
-
 expressapp = (func) ->
-  top = fs.readFileSync "#{__dirname}/apphead.coffee"
-  bottom = fs.readFileSync "#{__dirname}/appfooter.coffee"
+  top = fs.readFileSync "#{__dirname}/htmlbase/apphead.coffee"
+  bottom = fs.readFileSync "#{__dirname}/htmlbase/appfooter.coffee"
   text "#{top}\n"
   func()
   text "\n"

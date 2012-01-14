@@ -1,3 +1,6 @@
-server =
-  source = fs.readFileSync "#{__dirname}/appfooter.coffee"
-  text source + "\n"
+#startexports
+expressapp = (func) ->
+  text """
+       nowjs = require 'now'
+       everyone = nowjs.initialize app
+       """

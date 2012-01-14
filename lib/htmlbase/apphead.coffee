@@ -14,3 +14,4 @@ app.set("view options", { layout: false })
 app.register '.html', require('ejs')
 app.register '.coffee', require('coffeekup').adapters.express
 
+app.use require('browserify')({mount: "#{__dirname}/loader.coffee", require: 'util', 'fs', 'node-uuid', 'coffee-script', 'mongolian', 'drykup'})

@@ -1,6 +1,21 @@
 
 #startexports
 
+savefields = {}
+
+savefields.textfield = (fieldname, typename) ->
+  tosave[typename] = $(fieldname).val()
+
+savefield = (typename, fieldname, fieldval) ->
+
+entrybutton = (type) ->
+  for name, val in type when name.indexOf('_') isnt name.length-1
+    savefield val.type, name, type.name_
+
+    #copy from input field, checkbox etc.
+    #into object
+
+
 #entrybutton
 #when they click the button
 #add a new record

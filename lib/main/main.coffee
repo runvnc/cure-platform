@@ -6,9 +6,8 @@ shown = ->
   ]
 
 exports.run = ->
-  addpermission 'guests', 'todo', 'all'
-
   expressapp ->
+    addpermission 'guests', 'todo', 'all'
     htmlpage 'todo', ->
       entryfield todo.description
       entrybutton todo, 'add'
@@ -29,4 +28,4 @@ exports.run = ->
       h1 'About'
       p 'Hello, this is about..'
  
-
+ 

@@ -1,8 +1,9 @@
 module.exports = [
-  { db: off }
   { base: on }
+  { security: on }
+  { db: on }
   { htmlbase: on }
-  { nowjs: off }
-  { form: off }
+  { nowjs: on }
+  { form: on }
 ]
 
