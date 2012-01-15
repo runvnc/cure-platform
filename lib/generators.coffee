@@ -2,25 +2,26 @@
 
 exports.dk = dk
 
+colors = require 'colors'
 util = require 'util'
 fs = require 'fs'
 uuid = require './souuid'
 cs = require 'coffee-script'
 cureutil = require './util'
 
-appendcall = (object, name, func) ->
+appendcall = (object, name, func, category) ->
   funcs = "#{name}_funcs"
   if (object[funcs])?
-    object[funcs].push func
+    object[funcs].push { name: name, cat: category, func: func }
   else
-    object[funcs] = [ object[name], func ]
+    object[funcs] = [ {name: name, cat: category, func: object[name]}, {name: name, cat:category, func: func} ]
   object[name] = cureutil.inseries object[funcs]
 
 
-mergeover = (object, properties) ->
+mergeover = (object, properties, category) ->
   for key, val of properties when key.indexOf('_funcs') < 0
     if typeof val is "function"
-      appendcall object, key, val
+      appendcall object, key, val, category
     else
       object[key] = val
   object
@@ -59,6 +60,7 @@ newfile = (file) ->
     if output? and output.length > 0
       newout = replacedeferred output
       fs.writeFileSync "#{currgen.path}/#{outfile}#{currgen.ext}", newout
+      console.log "------> ".rainbow + "#{currgen.path}/#{outfile}#{currgen.ext}".inverse
       dk.resetHtml()
   outfile = file
   dk.resetHtml()
@@ -80,7 +82,8 @@ class FileGenerator
       output = dk.htmlOut
       newout = replacedeferred output
       ret = fs.writeFileSync("#{@path}/#{outfile}#{@ext}", newout)
-      
+      console.log "------> ".rainbow + "#{@path}/#{outfile}#{@ext}".inverse
+ 
     catch error
       console.log "File generation error. Generator name is #{@name} and path is #{@path}." +
                   "Error in #{name} function #{func}. Message is #{error}"
@@ -89,7 +92,7 @@ class FileGenerator
 generators =
   client: new FileGenerator 'client', 'views', '.html'
   server: new FileGenerator 'server', '.', '.coffee'
-  jsclient: new FileGenerator 'jsclient', 'views'
+  jsclient: new FileGenerator 'jsclient', 'views', '.js'
   types: new FileGenerator 'types', '/tmp', '.tmp'
 
 addToAll = (funcs) ->
@@ -123,6 +126,9 @@ addfunc = (name, func) ->
     funcs = generators[exports.context].funcs
     try
       if funcs[name]?
+        console.log ' '
+        console.log "#{exports.context}".underline.magenta + ":" + "#{name}".underline + "()"
+        console.log ' '
         funcs[name](allargs...)
       else
         console.log exports.context + '.' + name + ' not defined, skipping'
@@ -130,8 +136,8 @@ addfunc = (name, func) ->
       console.log "Generation error: name = #{name}  func = #{util.inspect func}. Error is #{error}"
       process.exit 1
 
-exports.addAll = (gen, funcarr) ->
-  mergeover generators[gen].funcs, funcarr
+exports.addAll = (plugin, gen, funcarr) ->
+  mergeover generators[gen].funcs, funcarr, plugin
 
 exports.functions = {}
 

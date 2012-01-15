@@ -2,14 +2,23 @@
 <head>
   <head>
   <title>about</title>
-  <script src="//ajax.googleapis.com/ajax/libs/jquery/1.5.1/jquery.min.js">
-  </script>
 </head>
 
   <body>
     <h1>About</h1>
     <p>Hello, this is about..</p>
-    <script src="browserify.js">
-    </script>
+    <script src="//ajax.googleapis.com/ajax/libs/jquery/1.5.1/jquery.min.js">
+</script>
+<script src="/browserify.js">
+</script>
+<script src="/app.js">
+</script>
+<script>
+  var type_todo = {"version_":1,"name_":"todo","done":{"type":"boolean","name":"done"},"description":{"type":"text","name":"description"},"archived":{"type":"boolean","name":"archived"}}
+
+  wireadd(type_todo);
+
+</script>
+
   </body>
 </head>

@@ -3,7 +3,6 @@
 entryfields = {}
 
 inputentry = (name, type) ->
-  mustinclude headitems, jquery
   input
     type: type
     name: name
@@ -19,6 +18,10 @@ entryfields =
     inputentry name, 'text'
 
 entrybutton = (entity, msg) ->
-  button { id: "btn#{entity.name_}" }, msg
+  button { id: "btnadd#{entity.name_}" }, msg
+  footerscript ->
+    script ->
+      text "var type_#{entity.name_} = #{JSON.stringify entity}\n"
+      text "wireadd(type_#{entity.name_});\n"
 
 

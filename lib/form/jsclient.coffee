@@ -1,32 +1,24 @@
-
 #startexports
 
-savefields = {}
+topjs = (func) ->
+  tojs fs.readFileSync("#{__dirname}/form/cstop.coffee").toString()
+  func?()
+  
+midjs = (func) ->
+  tojs fs.readFileSync("#{__dirname}/form/csmid.coffee").toString()
+  func?()
 
-savefields.textfield = (fieldname, typename) ->
-  tosave[typename] = $(fieldname).val()
+bottomjs = (func) ->
+  tojs fs.readFileSync("#{__dirname}/form/csbottom.coffee").toString()
+  func?()
 
-savefield = (typename, fieldname, fieldval) ->
+scriptfooter = ->
+  topjs()
+  midjs()
+  bottomjs()
 
-entrybutton = (type) ->
-  for name, val in type when name.indexOf('_') isnt name.length-1
-    savefield val.type, name, type.name_
-
-    #copy from input field, checkbox etc.
-    #into object
-
-
-#entrybutton
-#when they click the button
-#add a new record
-#with the data
-#they entered
-
-#for each field
-#get the value
-#assign it to the object
-#
-#save the object in the database
-#before saving object check permissions
-
-
+expressapp = (func) ->
+  func()
+  topjs()
+  midjs()
+  bottomjs()

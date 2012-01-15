@@ -13,5 +13,11 @@ app.set 'view engine', 'ejs'
 app.set("view options", { layout: false })
 app.register '.html', require('ejs')
 app.register '.coffee', require('coffeekup').adapters.express
+app.use '/', express.static(__dirname + '/views')
 
-app.use require('browserify')({mount: "#{__dirname}/loader.coffee", require: 'util', 'fs', 'node-uuid', 'coffee-script', 'mongolian', 'drykup'})
+browserify = require 'browserify'
+bundle = browserify
+  entry: "#{__dirname}/views/test.coffee"
+  require: 'util', 'fs', 'node-uuid', 'coffee-script', 'mongolian', 'drykup'
+app.use bundle
+

@@ -23,6 +23,17 @@ title = (x...) -> title_ x...
 script = (x...) -> script_ x...
 
 headitems = []
+footerscripts = []
+
+scriptfooter = (func) ->
+  func()
+  (item() for item in footerscripts).join() if footerscripts?
+
+footerscript = (func) ->
+  footerscripts.push func
+
+jquery = ->
+  script src: '//ajax.googleapis.com/ajax/libs/jquery/1.5.1/jquery.min.js', ->
 
 htmlhead = (title_) ->
   head ->
@@ -39,12 +50,12 @@ htmlpage = (title_, contents) ->
          
     body ->
       contents()
-      script src: '/browserify.js', ->
+      defer ->
+        scriptfooter ->
+          jquery()
+          script src: '/browserify.js', ->
+          script src: '/app.js', ->
        
-
-jquery = ->
-  script src: '//ajax.googleapis.com/ajax/libs/jquery/1.5.1/jquery.min.js', ->
-
 expressapp = (func) ->
   func()
   

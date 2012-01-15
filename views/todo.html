@@ -2,15 +2,24 @@
 <head>
   <head>
   <title>todo</title>
-  <script src="//ajax.googleapis.com/ajax/libs/jquery/1.5.1/jquery.min.js">
-  </script>
 </head>
 
   <body>
     <input type="text" name="description" id="description_" />
 
-    <button id="btntodo">add</button>
-    <script src="browserify.js">
-    </script>
+    <button id="btnaddtodo">add</button>
+    <script src="//ajax.googleapis.com/ajax/libs/jquery/1.5.1/jquery.min.js">
+</script>
+<script src="/browserify.js">
+</script>
+<script src="/app.js">
+</script>
+<script>
+  var type_todo = {"version_":1,"name_":"todo","done":{"type":"boolean","name":"done"},"description":{"type":"text","name":"description"},"archived":{"type":"boolean","name":"archived"}}
+
+  wireadd(type_todo);
+
+</script>
+
   </body>
 </head>

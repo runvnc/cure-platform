@@ -14,13 +14,15 @@ app.set 'view engine', 'ejs'
 app.set("view options", { layout: false })
 app.register '.html', require('ejs')
 app.register '.coffee', require('coffeekup').adapters.express
+app.use '/', express.static(__dirname + '/views')
 
 browserify = require 'browserify'
-#bundle = browserify
-#  mount: "#{__dirname}/views/js/test.js"
-#  require: 'util', 'fs', 'node-uuid', 'coffee-script', 'mongolian', 'drykup'
-bundle = browserify __dirname + '/views/test.js'
+bundle = browserify
+  entry: "#{__dirname}/views/test.coffee"
+  require: 'util', 'fs', 'node-uuid', 'coffee-script', 'mongolian', 'drykup'
 app.use bundle
+
+
 
 security.addpermission 'guests', 'todo', 'all'
 app.get '/todo', (req, res) ->

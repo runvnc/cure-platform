@@ -26,7 +26,7 @@ strip = (def) ->
 dropext = (file) ->
   file.substr 0, file.indexOf('.')
 
-wrap = (source, file) ->
+wrap = (source, file, plugin) ->
   if not file? or file is '.' or file is '..' then return ''
   file = dropext file
   source = (source + " ").trim()
@@ -49,9 +49,9 @@ wrap = (source, file) ->
     defs = exports.match /^[a-z0-9]+[ ]*[=]+/gmi
     if defs?
       list = ("#{strip def}:#{strip def}" for def in defs)
-      bottom = "gen.addAll '#{file}', {#{list.join()}}"
+      bottom = "gen.addAll '#{plugin}','#{file}', {#{list.join()}}"
   else
-    console.log "No #startexports in #{file}"
+    #console.log "No #startexports in #{file}"
     return ''
   top + inc + "\n" + declares + source + "\n" + bottom
 
@@ -61,18 +61,18 @@ cseval = (filename) ->
   compiled = cs.compile code, bare:on
   eval compiled
 
-process = (path, fname) ->
-  console.log "Processing file #{path}/#{fname}"
+process = (path, fname, plugin) ->
   if not pathx.existsSync "#{path}/#{fname}"
     false
   else
     stats = fs.statSync "#{path}/#{fname}"
     if stats.isDirectory() then return false
-    if not fname in [ 'client.coffee', 'server.coffee', 'jsclient.coffee']
-      require "#{path}/#{fname}"
+    if not (fname in [ 'client.coffee', 'server.coffee', 'jsclient.coffee'])
+      #require "#{path}/#{fname}"
       return
+    console.log "Processing file #{path}/#{fname}"
     source = fs.readFileSync "#{path}/#{fname}"
-    source = wrap source, fname
+    source = wrap source, fname, plugin
     tmpname = "#{path}/tmp__#{fname}_#{uuid.v4()}"
     fs.writeFileSync tmpname + '.coffee', source
     cseval tmpname + '.coffee'
@@ -82,8 +82,8 @@ process = (path, fname) ->
 loadall = (plugin) ->
   path = "#{__dirname}/#{plugin}"
   files = fs.readdirSync path
-  for f in files when f isnt 'types.coffee' and f isnt 'main.coffee' and f.indexOf('tmp__') isnt 0
-    process path, f
+  for f in files when f isnt 'types.coffee' and f isnt 'main.coffee' and f.indexOf('tmp__') isnt 0 and f.indexOf('.') isnt 0
+    process path, f, plugin
   generators.makeFunctions()
 
 addgenfunctions = ->
