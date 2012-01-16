@@ -1,3 +1,4 @@
 #startexports
-head = ->
-  mustinclude headitems 'js/now.js'
+htmlpage = ->
+  footerscript ->
+    script src: '/nowjs/now.js', ->

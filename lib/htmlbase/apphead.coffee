@@ -1,4 +1,6 @@
 util = require 'util'
+dbx = require './lib/db/db.coffee'
+db = dbx.db
 
 express = require 'express'
 

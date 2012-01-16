@@ -1,5 +1,7 @@
 security = require './lib/security/security'
 util = require 'util'
+dbx = require './lib/db/db.coffee'
+db = dbx.db
 
 express = require 'express'
 
@@ -37,3 +39,8 @@ app.listen 3000
 
 nowjs = require 'now'
 everyone = nowjs.initialize app
+everyone.now.dbinsert = (name, data) ->
+    console.log "data is"
+    console.log data
+    db.collection(name).insert data           
+    console.log "tried to call whatever"

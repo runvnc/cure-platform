@@ -13,15 +13,17 @@ checkobj = (obj, prop, func) ->
   if obj? and (obj[prop]? or obj['all']?)
     func obj[prop]
   else
+    console.log "Access denied: property #{prop}"
     false
 
 checkpermission = (group, object, operation) ->
   ret = checkobj permissions[group], object, (ops) ->
     checkobj ops, operation, -> true
   if not ret
-    checkobj permissions['all'], object, (ops) ->
+    ret =checkobj permissions['all'], object, (ops) ->
       checkobj ops, operation, -> true
-  
+  ret
+
 exports.addpermission = addpermission
 
 exports.currentgroup = currentgroup = 'guests'
